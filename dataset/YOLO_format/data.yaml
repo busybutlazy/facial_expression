@@ -1,0 +1,22 @@
+data: "/kaggle/input/affectnet-yolo-format/YOLO_format"
+
+train: "/kaggle/input/affectnet-yolo-format/YOLO_format/train/images"
+val: "/kaggle/input/affectnet-yolo-format/YOLO_format/valid/images"
+test: "/kaggle/input/affectnet-yolo-format/YOLO_format/test/images"
+
+nc: 8
+
+names:
+  [
+    "Anger",
+    "Contempt",
+    "Disgust",
+    "Fear",
+    "Happy",
+    "Neutral",
+    "Sad",
+    "Surprise",
+  ]
+
+# Network configuration (choose other variations if desired)
+network: "yolov8n"
