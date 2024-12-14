@@ -4,7 +4,7 @@ import kagglehub
 from pathlib import Path
 import os
 
-
+# Download dataset
 dataset_path=Path.cwd().joinpath("dataset/")
 if not os.path.exists(dataset_path):
     path = kagglehub.dataset_download("fatihkgg/affectnet-yolo-format")
@@ -22,12 +22,16 @@ print(train_img_path)
 show_img_num=10
 if os.path.isdir(train_img_path):
     img=None
-    for f in os.listdir(train_img_path):
-        if type(img)==np.ndarray:
-            img=np.concatenate((img,cv2.imread(os.path.join(train_img_path,f))),axis=1)
-        else:
+    list_of_train_data_filenames=os.listdir(train_img_path)
+    for f in list_of_train_data_filenames:
+    
+        if type(img)!=np.ndarray:
+            # First img and show the shape of img.
             img=cv2.imread(os.path.join(train_img_path,f))
-            print(img.shape)
+            print(f"num of train files: {len(list_of_train_data_filenames)}")
+            print(f'Shape of image: {img.shape}')
+        else:
+            img=np.concatenate((img,cv2.imread(os.path.join(train_img_path,f))),axis=1)
         show_img_num-=1
         if show_img_num<=1:
             cv2.imshow("Img"+str(show_img_num-9), img)
@@ -35,6 +39,6 @@ if os.path.isdir(train_img_path):
             cv2.destroyAllWindows()
             break
 # %%
-# %%
 else:
     print("There are no files.")
+

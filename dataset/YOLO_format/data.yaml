@@ -1,8 +1,8 @@
-data: "/kaggle/input/affectnet-yolo-format/YOLO_format"
+data: "/home/busybutlazy/facial_expression/dataset/YOLO_format"
 
-train: "/kaggle/input/affectnet-yolo-format/YOLO_format/train/images"
-val: "/kaggle/input/affectnet-yolo-format/YOLO_format/valid/images"
-test: "/kaggle/input/affectnet-yolo-format/YOLO_format/test/images"
+train: "/home/busybutlazy/facial_expression/dataset/YOLO_format/train/images"
+val: "/home/busybutlazy/facial_expression/dataset/YOLO_format/valid/images"
+test: "/home/busybutlazy/facial_expression/dataset/YOLO_format/test/images"
 
 nc: 8
 
