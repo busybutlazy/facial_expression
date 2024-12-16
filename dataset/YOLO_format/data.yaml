@@ -2,6 +2,8 @@ data: "/home/busybutlazy/facial_expression/dataset/YOLO_format"
 
 train: "/home/busybutlazy/facial_expression/dataset/YOLO_format/train/images"
 val: "/home/busybutlazy/facial_expression/dataset/YOLO_format/valid/images"
+# val: "/home/busybutlazy/facial_expression/dataset/YOLO_format/test/images"
+
 test: "/home/busybutlazy/facial_expression/dataset/YOLO_format/test/images"
 
 nc: 8
