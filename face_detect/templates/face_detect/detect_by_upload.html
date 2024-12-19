@@ -1,0 +1,25 @@
+<!-- upload.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+</head>
+<body>
+    <h1>Upload an Image for Prediction</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="img">Select an Image:</label>
+        <input type="file" name="img" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <!-- {% if prediction %}
+    <h2>{{ prediction }}</h2>
+    <img src="data:image/png;base64,{{ img_str }}" alt="Uploaded Image" width="300" />
+    {% endif %} -->
+</body>
+</html>
+

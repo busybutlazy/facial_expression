@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Screenshot</title>
+    <style>
+        video, canvas{
+            width: 100%;
+            max-width: 500px;
+            max-height: 400px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
+        img {
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Record Video & Capture Screenshot</h1>
+    <video id="video" autoplay></video>
+    <button id="captureButton">Capture Screenshot</button>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <h3>Captured Screenshot</h3>
+    <img id="capturedImage" src="{% static 'pics/Unknown_person.jpg' %}" alt="Screenshot will appear here" name="img">
+    <button id="sendButton">Using this picture!</button>
+    <!-- <form id="myForm" onsubmit="return modifyFormData(event)" action="{% url 'screenshot_upload_view' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button type="submit">Submit</button>
+    </form> -->
+
+    <!-- <form id="imageForm" method="POST" enctype="multipart/form-data"> style="display:none;" -->
+        <!-- {% csrf_token %} -->
+        <!-- <input type="hidden" name="img" id="imgInput"> -->
+        <!-- <button type="submit">Upload Screenshot</button> -->
+    <!-- </form> -->
+
+    <script>
+        const videoElement = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const capturedImage = document.getElementById("capturedImage");
+        const captureButton = document.getElementById("captureButton");
+        const sendButton = document.getElementById("sendButton");
+        let myForm = document.getElementById("myForm")
+        // let imageForm = document.getElementById('imageForm');
+        // let imgInput = document.getElementById('imgInput');
+
+        // Access the camera
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+            } catch (err) {
+                console.error("Error accessing camera: ", err);
+            }
+        }
+
+        // Capture a screenshot and display it
+        function captureScreenshot() {
+            console.log("Button click")
+            const context = canvas.getContext("2d");
+
+            // Set canvas size to match the video element size
+            canvas.width = videoElement.videoWidth;
+            canvas.height = videoElement.videoHeight;
+
+            // Draw the current video frame onto the canvas
+            context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+
+            // Convert the canvas to a base64 image
+            let imageData = canvas.toDataURL("image/png");
+
+            // Display the image
+            capturedImage.src = imageData;
+            // imgInput.value=imageData
+        }
+        function sendImgToServer(){
+            console.log("Sending img to server......")
+            let imageData = capturedImage.src;
+            
+            capturedImage.style.display = 'block';
+            let byteString = atob(imageData.split(',')[1]);
+            let arrayBuffer = new ArrayBuffer(byteString.length);
+            let uintArray = new Uint8Array(arrayBuffer);
+            for (let i = 0; i < byteString.length; i++) {
+                uintArray[i] = byteString.charCodeAt(i);
+            }
+            let blob = new Blob([uintArray], { type: 'image/png' });
+            const formData = new FormData();
+
+            formData.append('img', blob, 'screenshot.png');
+
+            fetch("{% url 'screenshot_upload_view' %}", {
+                method: "POST",  // Make sure method is 'POST'
+                headers: {
+                    // 'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value  // Include CSRF token
+                },
+                body: formData  // Send FormData with the Blob image
+            })
+            .then(response => {
+                if (response.ok) {
+                    // If the server response is OK, redirect to the result page
+                    window.location.href = response.url;  // Redirect to the URL rendered by the server
+                } else {
+                    console.error("Error uploading image:", response.status);
+                }
+            })
+            .catch(error => {
+                console.error("Error uploading image:", error);
+            });
+        }
+
+        captureButton.addEventListener("click", captureScreenshot);
+        sendButton.addEventListener("click", sendImgToServer);
+
+        // imageForm.addEventListener(submit,)
+        // Start the camera on page load
+        window.onload = startCamera;
+    </script>
+</body>
+</html>

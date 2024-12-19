@@ -8,6 +8,6 @@
 <body>
     <h2>Prediction Result</h2>
     <p>Prediction: {{ prediction }}</p>
-    <img src="{{ image.url }}" alt="Uploaded Image">
+    <img src="data:image/png;base64,{{ img_str }}" alt="Uploaded Image" width="300" />
 </body>
 </html>
